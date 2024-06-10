@@ -1,0 +1,28 @@
+import { BaseApp } from "@/entities/BaseApp";
+
+import { BaseService } from "@/entities/BaseService";
+import { Unauthorized } from "@/entities/Unauthorized";
+import { UserRepository } from "@/repository/User";
+
+export class AuthService extends BaseService {
+  private readonly userRepo: UserRepository;
+  constructor(baseApp: BaseApp) {
+    super(baseApp);
+    this.userRepo = new UserRepository(baseApp.db);
+  }
+
+  validateUser = async (idToken: string) => {
+    const decodedToken = await this.app.auth.verifyIdToken(idToken);
+    return decodedToken;
+  };
+
+  signinWithEmail = async (idToken: string) => {
+    try {
+      const decodedToken = await this.app.auth.verifyIdToken(idToken);
+      const { name, email, picture } = decodedToken;
+      await this.userRepo.onboardUser({ name, email, picture });
+    } catch (error) {
+      throw new Unauthorized(error.message);
+    }
+  };
+}
