@@ -1,4 +1,6 @@
+import { BadRequestError } from "@/entities/BadRequest";
 import { BaseRepository } from "@/entities/BaseRepository";
+import { NotFoundError } from "@/entities/NotFoundError";
 import { UserEntity } from "@/entities/User";
 import { firestore } from "firebase-admin";
 
@@ -31,7 +33,7 @@ export class UserRepository extends BaseRepository {
 
     const timestamp = new Date().toISOString();
 
-    if (foundOne) {
+    if (foundOne?.id) {
       const usersRef = this.db.collection("USERS").doc(foundOne.id);
       foundOne.updatedAt = timestamp;
 
@@ -51,6 +53,10 @@ export class UserRepository extends BaseRepository {
 
   updateUser = async (userData: UserEntity) => {
     const foundOne = await this.findOneByEmail(userData.email);
+
+    if (!foundOne?.id) {
+      throw new NotFoundError("No data with provided email!");
+    }
 
     const timestamp = new Date().toISOString();
 

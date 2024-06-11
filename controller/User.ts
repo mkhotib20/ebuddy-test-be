@@ -3,7 +3,9 @@ import { BaseApp } from "@/entities/BaseApp";
 import { BaseController } from "@/entities/BaseController";
 import { InternalError } from "@/entities/InternalError";
 import { RequestWithUser } from "@/entities/RequestWithUser";
+import { Unauthorized } from "@/entities/Unauthorized";
 import UserService from "@/services/User";
+import parseError from "@/utils/parseError";
 import type { Response } from "express";
 
 /**
@@ -20,15 +22,18 @@ export class UserController extends BaseController {
   handleFetchUserData = async (req: RequestWithUser, res: Response) => {
     const userData = req.user;
     try {
-      const user = await this.userService.fetchUserData(userData?.email);
+      const user = await this.userService.fetchUserData(userData?.email || "");
       res.send({ data: user });
     } catch (error) {
-      throw new InternalError(error.message);
+      throw new InternalError(parseError(error));
     }
   };
 
   handleUpdateUserData = async (req: RequestWithUser, res: Response) => {
     const userData = req.user;
+    if (!userData) {
+      throw new Unauthorized("You need to login to access this resource");
+    }
 
     try {
       const { name: newName } = req.body || {};
@@ -38,12 +43,12 @@ export class UserController extends BaseController {
 
       const user = await this.userService.updateUserData({
         name: newName,
-        email: userData.email,
+        email: userData.email || "",
       });
 
       res.send({ data: user });
     } catch (error) {
-      throw new InternalError(error.message);
+      throw new InternalError(parseError(error));
     }
   };
 }

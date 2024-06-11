@@ -2,8 +2,13 @@ import serviceAccount from "@/credential.json";
 import admin, { credential } from "firebase-admin";
 
 const configureFirebase = () => {
+  const readCred = credential.cert(serviceAccount);
+
   admin.initializeApp({
-    credential: credential.cert(serviceAccount),
+    ...(readCred && {
+      credential: readCred,
+    }),
+    projectId: process.env.FIREBASE_PROJECT_ID,
     databaseURL: `https://${serviceAccount.projectId}.firebaseio.com`,
   });
 

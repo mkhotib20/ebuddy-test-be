@@ -1,4 +1,4 @@
-export class UserEntity {
+export interface UserEntity {
   id?: string;
   name: string;
   picture?: string;

@@ -2,6 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
+    "strict": true,
     "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
@@ -16,5 +17,5 @@
     "lib": ["es2021"]
   },
   "lib": ["es2015"],
-  "exclude": ["./dist/*"]
+  "exclude": ["./dist/*", "./node_modules/*"]
 }

@@ -13,11 +13,17 @@ export class AuthMiddleware extends BaseMiddleware {
     this.authService = new AuthService(baseApp);
   }
 
-  authenticated = async (req: RequestWithUser, _, next: NextFunction) => {
+  authenticated = async (
+    req: RequestWithUser,
+    _: unknown,
+    next: NextFunction
+  ) => {
     const cookie = req.cookies[AUTH_COOKIE_NAME];
 
     if (!cookie) {
-      throw new Unauthorized("You cannot access protected resource!");
+      throw new Unauthorized(
+        "Unauthorized, you cannot access protected resource!"
+      );
     }
     try {
       const userResult = await this.authService.validateUser(cookie);
@@ -25,7 +31,9 @@ export class AuthMiddleware extends BaseMiddleware {
     } catch (error) {
       console.error(error);
 
-      throw new Unauthorized("You cannot access protected resource!");
+      throw new Unauthorized(
+        "Unauthorized, you cannot access protected resource!"
+      );
     } finally {
       next();
     }

@@ -3,6 +3,7 @@ import { BaseApp } from "@/entities/BaseApp";
 import { BaseService } from "@/entities/BaseService";
 import { Unauthorized } from "@/entities/Unauthorized";
 import { UserRepository } from "@/repository/User";
+import parseError from "@/utils/parseError";
 
 export class AuthService extends BaseService {
   private readonly userRepo: UserRepository;
@@ -20,9 +21,9 @@ export class AuthService extends BaseService {
     try {
       const decodedToken = await this.app.auth.verifyIdToken(idToken);
       const { name, email, picture } = decodedToken;
-      await this.userRepo.onboardUser({ name, email, picture });
+      await this.userRepo.onboardUser({ name, email: email || "", picture });
     } catch (error) {
-      throw new Unauthorized(error.message);
+      throw new Unauthorized(parseError(error));
     }
   };
 }
