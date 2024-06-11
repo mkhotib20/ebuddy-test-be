@@ -14,7 +14,14 @@ export class AuthService extends BaseService {
 
   validateUser = async (idToken: string) => {
     const decodedToken = await this.app.auth.verifyIdToken(idToken);
-    return decodedToken;
+
+    if (!decodedToken?.email)
+      throw new Unauthorized(
+        "Unauthorized, you cannot access protected resource!"
+      );
+
+    const foundUser = await this.userRepo.findOneByEmail(decodedToken.email);
+    return foundUser;
   };
 
   signinWithEmail = async (idToken: string) => {

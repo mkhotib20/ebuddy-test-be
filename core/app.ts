@@ -5,6 +5,7 @@ import { logger, region } from "firebase-functions";
 
 import { ApiError } from "@/entities/ApiError";
 import authRoutes from "@/routes/auth";
+import postRoutes from "@/routes/post";
 import userRoutes from "@/routes/user";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -19,6 +20,7 @@ server.use(bodyParser.json());
 
 userRoutes({ server, db, auth });
 authRoutes({ server, db, auth });
+postRoutes({ server, db, auth });
 
 server.use((err: ApiError, _: unknown, res: Response, _2: unknown) => {
   logger.error(err);
@@ -28,6 +30,6 @@ server.use((err: ApiError, _: unknown, res: Response, _2: unknown) => {
   });
 });
 
-// server.listen(3001);
+server.listen(3001);
 
 export const webApi = region("asia-southeast1").https.onRequest(server);

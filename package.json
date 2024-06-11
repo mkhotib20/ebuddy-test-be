@@ -7,7 +7,7 @@
   "scripts": {
     "compile": "node -r @swc-node/register ./core/app.ts",
     "build": "tsc",
-    "dev": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"npm run start\"",
+    "dev": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"npm run compile\"",
     "start": "firebase emulators:start --only functions"
   },
   "_moduleAliases": {
