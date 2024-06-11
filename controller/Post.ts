@@ -15,10 +15,23 @@ export class PostController extends BaseController {
     this.postService = new PostService(baseApp);
   }
 
-  handleFetchHomepagePost = async (_: unknown, res: Response) => {
-    const posts = await this.postService.fetchHomePagePost();
+  handleFetchHomepagePost = async (req: RequestWithUser, res: Response) => {
+    const page = parseInt(req.query["page"]?.toString() || "1", 10);
+    const limit = parseInt(req.query["limit"]?.toString() || "10", 10);
 
-    res.send({ data: posts });
+    const posts = await this.postService.fetchHomePagePost(limit + 1, page);
+    console.log(posts.length, limit);
+
+    const hasNext = posts.length > limit;
+
+    if (hasNext) {
+      posts.pop();
+    }
+
+    res.send({
+      data: posts,
+      hasNext,
+    });
   };
 
   handleCreatePost = async (req: RequestWithUser, res: Response) => {

@@ -11,13 +11,18 @@ export class PostRepository extends BaseRepository {
     super(db);
   }
 
-  fetchData = async () => {
+  fetchData = async (limit = 10, page = 1) => {
+    const offset = (page - 1) * limit;
     const snapshot = await this.db
       .collection("POSTS")
       .orderBy("timestamp", "desc")
+      .limit(limit)
+      .offset(offset)
       .get();
 
     const posts: any[] = [];
+    console.log(snapshot.size);
+
     snapshot.forEach((doc) => {
       posts.push(doc.data());
     });

@@ -14,8 +14,8 @@ class PostService extends BaseService {
     this.postRepo = new PostRepository(app.db);
   }
 
-  fetchHomePagePost = async () => {
-    const posts = await this.postRepo.fetchData();
+  fetchHomePagePost = async (limit = 10, page = 1) => {
+    const posts = await this.postRepo.fetchData(limit, page);
     return posts;
   };
 
