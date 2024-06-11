@@ -1,9 +1,9 @@
 import { BaseApp } from "@/entities/BaseApp";
-import { Response } from "express";
+import { Response, Request } from "express";
 
 import { BaseController } from "@/entities/BaseController";
 import { PostEntity } from "@/entities/PostEntity";
-import { RequestWithUser } from "@/entities/RequestWithUser";
+
 import PostService from "@/services/Post";
 
 export class PostController extends BaseController {
@@ -15,7 +15,7 @@ export class PostController extends BaseController {
     this.postService = new PostService(baseApp);
   }
 
-  handleFetchHomepagePost = async (req: RequestWithUser, res: Response) => {
+  handleFetchHomepagePost = async (req: Request, res: Response) => {
     const page = parseInt(req.query["page"]?.toString() || "1", 10);
     const limit = parseInt(req.query["limit"]?.toString() || "10", 10);
 
@@ -34,7 +34,7 @@ export class PostController extends BaseController {
     });
   };
 
-  handleCreatePost = async (req: RequestWithUser, res: Response) => {
+  handleCreatePost = async (req: Request, res: Response) => {
     const requestBody: PostEntity = req.body;
     const userData = req.user;
 

@@ -2,10 +2,10 @@ import { BadRequestError } from "@/entities/BadRequest";
 import { BaseApp } from "@/entities/BaseApp";
 import { BaseController } from "@/entities/BaseController";
 import { InternalError } from "@/entities/InternalError";
-import { RequestWithUser } from "@/entities/RequestWithUser";
+
 import UserService from "@/services/User";
 import parseError from "@/utils/parseError";
-import type { Response } from "express";
+import type { Response, Request } from "express";
 
 /**
  * Based on Clean code architecture, Controller is used to parse request and prepare response
@@ -18,7 +18,7 @@ export class UserController extends BaseController {
     this.userService = new UserService(app);
   }
 
-  handleFetchUserData = async (req: RequestWithUser, res: Response) => {
+  handleFetchUserData = async (req: Request, res: Response) => {
     const userData = req.user;
     try {
       const user = await this.userService.fetchUserData(userData?.email || "");
@@ -28,7 +28,7 @@ export class UserController extends BaseController {
     }
   };
 
-  handleUpdateUserData = async (req: RequestWithUser, res: Response) => {
+  handleUpdateUserData = async (req: Request, res: Response) => {
     const userData = req.user;
 
     try {

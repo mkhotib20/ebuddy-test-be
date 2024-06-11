@@ -30,6 +30,8 @@ server.use((err: ApiError, _: unknown, res: Response, _2: unknown) => {
   });
 });
 
-server.listen(3001);
+if (process.env.NODE_LISTEN) {
+  server.listen(3001);
+}
 
 export const webApi = region("asia-southeast1").https.onRequest(server);
