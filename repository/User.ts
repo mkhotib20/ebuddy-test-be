@@ -1,4 +1,3 @@
-import { BadRequestError } from "@/entities/BadRequest";
 import { BaseRepository } from "@/entities/BaseRepository";
 import { NotFoundError } from "@/entities/NotFoundError";
 import { UserEntity } from "@/entities/User";

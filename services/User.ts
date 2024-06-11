@@ -2,7 +2,6 @@ import { BaseApp } from "@/entities/BaseApp";
 import { BaseService } from "@/entities/BaseService";
 import { UserEntity } from "@/entities/User";
 import { UserRepository } from "@/repository/User";
-import { DecodedIdToken } from "firebase-admin/lib/auth/token-verifier";
 
 /**
  * Based on Clean code architecture, Service used for main business logic

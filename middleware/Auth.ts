@@ -5,6 +5,7 @@ import { RequestWithUser } from "@/entities/RequestWithUser";
 import { Unauthorized } from "@/entities/Unauthorized";
 import { AuthService } from "@/services/Auth";
 import { NextFunction } from "express";
+import { logger } from "firebase-functions/v1";
 
 export class AuthMiddleware extends BaseMiddleware {
   private readonly authService: AuthService;
@@ -29,7 +30,7 @@ export class AuthMiddleware extends BaseMiddleware {
       const userResult = await this.authService.validateUser(cookie);
       req.user = userResult;
     } catch (error) {
-      console.error(error);
+      logger.error(error);
 
       throw new Unauthorized(
         "Unauthorized, you cannot access protected resource!"

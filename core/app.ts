@@ -1,17 +1,14 @@
 import "module-alias/register";
 
 import configureFirebase from "@/config/firebaseConfig";
-import { https } from "firebase-functions";
+import { logger, region } from "firebase-functions";
 
 import { ApiError } from "@/entities/ApiError";
 import authRoutes from "@/routes/auth";
 import userRoutes from "@/routes/user";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import dotenv from "dotenv";
 import express, { Response } from "express";
-
-dotenv.config();
 
 const { db, auth } = configureFirebase();
 
@@ -24,7 +21,7 @@ userRoutes({ server, db, auth });
 authRoutes({ server, db, auth });
 
 server.use((err: ApiError, _: unknown, res: Response, _2: unknown) => {
-  console.error(err.stack);
+  logger.error(err);
   res.status(err.statusCode || 500).json({
     statusCode: err.statusCode,
     message: err.message,
@@ -33,4 +30,4 @@ server.use((err: ApiError, _: unknown, res: Response, _2: unknown) => {
 
 // server.listen(3001);
 
-export const webApi = https.onRequest(server);
+export const webApi = region("asia-southeast1").https.onRequest(server);
